@@ -8,4 +8,9 @@ export const theme = extendTheme({
     heading: `'Inter', sans-serif`,
     body: `'Inter', sans-serif`
   },
+  colors: {
+    brand: {
+      500: '#fcd535'
+    }
+  }
 });

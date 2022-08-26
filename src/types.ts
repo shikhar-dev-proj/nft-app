@@ -1,4 +1,6 @@
-export type Token = {
-    id: string
+export type NFT = {
     name: string
+    address: string
+    description: string
+    collection: string
 }
