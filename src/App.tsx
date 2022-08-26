@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Box, ChakraProvider, Flex, Grid,
   Spacer,
   Spinner,
@@ -21,8 +23,8 @@ export const App = () => {
   const [trimmedAddress, setTrimmedAddress] = useState('');
   const { hasCopied, onCopy } = useClipboard(address);
 
-  const [personalisedWearables, setPersonalisedWearables] = useState([...wearables])
-  const [snackbar, setSnackbar] = useState(false)
+  const [personalisedWearables, ] = useState([...wearables])
+  const [snackbar, setSnackbar] = useState<{ message: string, type: string}>({ message: '', type: ''})
 
   async function connect() {
     if (window.ethereum) {
@@ -35,41 +37,41 @@ export const App = () => {
     }
   }
 
-  // const poolHasEth = (p: any): boolean => token0(p.pairName).id === 'WETH' || token1(p.pairName).id === 'WETH'
+  async function getProfileAttributes(address: string) {
+    const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/${address}`)
 
-  // async function getProfileAttributes(address: string) {
-  //   const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/${address}`)
-
-  //   if (res.data?.pool) {
-  //     const interestedInEth = !!res.data.pool.find((p: any) => {
-  //       const pairName = p.name.split(' ')[0]
-  //       return token0(pairName).id === 'WETH' || token1(pairName).id === 'WETH'
-  //     })
-  //     if (interestedInEth) {
-  //       setPersonalisedWearables(wearables.sort((p1, p2) => {
-  //         if (poolHasEth(p1)) {
-  //           return -1
-  //         } else if (poolHasEth(p2)) {
-  //           return 1
-  //         } else return 0
-  //       }))
-  //     }
-  //   }
-  // }
+    if (res?.data) {
+      
+      if (res.data.nfts?.length) {
+        if (res.data.nfts.find((n: any) => n.category === 'parcel')) {
+          setSnackbar({ type: 'opportunity', 'message': 'Monetize your Decentraland estate.' })
+        }
+      } else if (+res.data?.earned > 0) {
+        setSnackbar({type: 'success', message: 'Congratulations!' })
+      }
+    }
+  }
 
   useEffect(() => {
     connect()
   }, [])
 
-  // useEffect(() => {
-  //   if (address) {
-  //     getProfileAttributes('0x022e3ce4eda264b3e3fef62036c8182ceb88e6ce' || address)
-  //   }
-  // }, [address])
+  useEffect(() => {
+    if (address) {
+      getProfileAttributes('0x022e3ce4eda264b3e3fef62036c8182ceb88e6ce' || address)
+    }
+  }, [address])
 
   return (
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="1rem">
+        { snackbar.type ?
+            <Alert cursor='pointer' status={snackbar.type === 'opportunity' ? 'warning' : 'success'} variant='solid' onClick={() => {window.open('https://adshares.net/')}}>
+              <AlertIcon /> 
+              {snackbar.message}
+            </Alert>
+            : null
+        }
         <Grid height="100vh" overflow='hidden' background='#0B0E11' templateColumns='1fr 8fr'>
           <NavBar />
           <Grid p={3} templateRows='3rem 1fr'>
