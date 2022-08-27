@@ -38,7 +38,7 @@ export const App = () => {
   }
 
   async function getProfileAttributes(address: string) {
-    const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/decentraland/${'0x00000000ddad119bac9829b7bbf0018af55eaee7' || address}`)
+    const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/decentraland/${address}`)
 
     if (res?.data) {
       
