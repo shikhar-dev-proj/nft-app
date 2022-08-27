@@ -38,7 +38,7 @@ export const App = () => {
   }
 
   async function getProfileAttributes(address: string) {
-    const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/${address}`)
+    const res: any = await axios.get(`http://idu-onboarding-qa.zeotap.net/get/decentraland/${'0x00000000ddad119bac9829b7bbf0018af55eaee7' || address}`)
 
     if (res?.data) {
       
@@ -66,7 +66,8 @@ export const App = () => {
     <ChakraProvider theme={theme}>
       <Box textAlign="center" fontSize="1rem">
         { snackbar.type ?
-            <Alert cursor='pointer' status={snackbar.type === 'opportunity' ? 'warning' : 'success'} variant='solid' onClick={() => {window.open('https://adshares.net/')}}>
+            <Alert cursor='pointer' status={snackbar.type === 'opportunity' ? 'warning' : 'success'} variant='solid' onClick={() => {
+              window.open('https://builder.decentraland.org/view/pool/98ce59dd-ace3-49b3-849a-9a7d37bc4b64?realm=localhost-stub')}}>
               <AlertIcon /> 
               {snackbar.message}
             </Alert>
